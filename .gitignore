@@ -1,0 +1,23 @@
+
+node_modules/
+.nyc_output/
+mochawesome-report/
+test.js
+config/settings.local.*
+doc/
+repos/
+package-lock.json
+packages
+.env.local
+
+### Commit specific idea files
+.idea/*
+!.idea/inspectionProfiles
+.idea/inspectionProfiles/*
+!.idea/inspectionProfiles/Project_Default.xml
+
+
+### Project specific
+.migrate
+typings/reaction-types
+kubernetes
