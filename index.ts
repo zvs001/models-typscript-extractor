@@ -53,6 +53,6 @@ function processFile(filePath: string, { fileResultPath }: { fileResultPath: str
   let newFilePath = path.join(config.outputDir, relativeFilePath)
   newFilePath = newFilePath.replace(/.ts$/, '.d.ts')
   console.log('newFilePath', newFilePath)
-  const typingsTitle = `/**********   ${relativeFilePath}    **********/ \n`
+  const typingsTitle = `\n/**********   ${relativeFilePath}    **********/\n`
   fs.appendFileSync(fileResultPath, typingsTitle + resultTypings, { encoding: 'utf8' })
 }
