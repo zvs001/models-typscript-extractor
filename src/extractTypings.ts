@@ -1,12 +1,14 @@
 import path from 'path'
 import _ from 'lodash'
 import * as ts from 'typescript'
+import { Config } from '../index'
 
-function extractTypings(file: string, config: any): string | null {
+function extractTypings(file: string, config: Config): string | null {
   // Create a Program to represent the project, then pull out the
   // source file to parse its AST.
-  const program = ts.createProgram([file], { allowJs: true })
-  const sourceFile = program.getSourceFile(file)
+  const filePath = path.join(config.cwdDir, file)
+  const program = ts.createProgram([filePath], { allowJs: true })
+  const sourceFile = program.getSourceFile(filePath)
   if (!sourceFile) return null
 
   // To print the AST, we'll use TypeScript's printer
@@ -23,7 +25,7 @@ function extractTypings(file: string, config: any): string | null {
   return output
 }
 
-function filterNodes(sourceFile: ts.SourceFile, { rootDir, interfaces }: any): ts.Node[] {
+function filterNodes(sourceFile: ts.SourceFile, { cwdDir, interfaces }: Config): ts.Node[] {
   const resultNodes: ts.Node[] = []
   ts.forEachChild(sourceFile, node => {
     let name = ''
@@ -62,12 +64,13 @@ function filterNodes(sourceFile: ts.SourceFile, { rootDir, interfaces }: any): t
 
       name = node.moduleSpecifier.text
       if (name.includes('..')) {
-        const rootDirPath = path.resolve(rootDir)
+        /** @note: Filter imports outside typing directory. */
+        // const rootDirPath = path.resolve(rootDir)
         const importPath = name
         const filePath = sourceFile.path
         const fileDir = path.dirname(filePath)
         const libFullPath = path.resolve(fileDir, importPath)
-        if (!libFullPath.includes(rootDir)) {
+        if (!libFullPath.includes(cwdDir)) {
           return null
         }
       } else {
