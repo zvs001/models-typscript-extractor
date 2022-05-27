@@ -1,0 +1,6 @@
+{
+  "extends": "module-kit/tsconfig",
+  "ts-node": {
+    "transpileOnly": true
+  }
+}

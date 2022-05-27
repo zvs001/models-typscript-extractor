@@ -7,24 +7,26 @@ import extractor from './index'
 
 function getArgs() {
   return yargs(hideBin(process.argv))
-    .option('cwdDir', {
-      alias: 'cwd',
-      type: 'string',
-      description: 'Rood Directory',
-    })
+    // .option('cwdDir', {
+    //   alias: 'cwd',
+    //   type: 'string',
+    //   description: 'Rood Directory',
+    // })
     .option('config', {
       alias: 'c',
       type: 'string',
       description: 'Configuration for extracting types',
     })
     .demandOption(['config'], 'Please provide --config for extracting types')
-    .exitProcess(false)
+    .exitProcess(true)
     .argv
 }
 
 const cmdStart = () => {
   const args = getArgs()
+  // @ts-ignore
   const { config: configPath } = args
+  invariant(configPath, '--config path is invalid')
 
   const absolutePath = path.join(process.cwd(), configPath)
 

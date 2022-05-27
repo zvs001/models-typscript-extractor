@@ -37,14 +37,17 @@ function filterNodes(sourceFile: ts.SourceFile, { cwdDir, interfaces }: Config):
     if (ts.isFunctionDeclaration(node)) {
       return null
       console.log('isFunctionDeclaration')
-      name = node.name.text
+      // @ts-ignore
+      name = node.name?.text
       // Hide the method body when printing
+      // @ts-ignore
       node.body = undefined
     } if (ts.isVariableStatement(node)) {
       return null
 
       console.log('isVariableStatement')
 
+      // @ts-ignore
       name = node.declarationList.declarations[0].name.getText(sourceFile)
     } if (ts.isInterfaceDeclaration(node)) {
       name = node.name.text
@@ -62,11 +65,13 @@ function filterNodes(sourceFile: ts.SourceFile, { cwdDir, interfaces }: Config):
     } else if (ts.isImportDeclaration(node)) {
       console.log('isImportDeclaration')
 
+      // @ts-ignore
       name = node.moduleSpecifier.text
       if (name.includes('..')) {
         /** @note: Filter imports outside typing directory. */
         // const rootDirPath = path.resolve(rootDir)
         const importPath = name
+        // @ts-ignore
         const filePath = sourceFile.path
         const fileDir = path.dirname(filePath)
         const libFullPath = path.resolve(fileDir, importPath)
